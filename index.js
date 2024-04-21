@@ -44,10 +44,10 @@ app.post('/api/sign-up', asyncHandler(async (req, res) => {
       generateToken(res, result.insertId);
 
       // Respond with user data
-      res.status(201).json({ 
+      res.status(200).json({ 
         id: result.insertId,
         name: req.body.firstName,
-        email: req.body.email,
+        type: 'user',
       });
     });
   });
@@ -75,7 +75,7 @@ app.post('/api/sign-up-admin', asyncHandler(async (req, res) => {
     const hash = bcrypt.hashSync(req.body.password, salt);
 
     // Insert admin data into the database
-    const values = [req.body.email, req.body.name, req.body.state, req.body.district, hash];
+    const values = [req.body.email, req.body.bankName, req.body.state, req.body.district, hash];
     const insertQuery = 'INSERT INTO admin (email, Name, State, District, Password) VALUES (?)';
 
     connection.query(insertQuery, [values], (err, result) => {
@@ -88,7 +88,7 @@ app.post('/api/sign-up-admin', asyncHandler(async (req, res) => {
       generateToken(res, result.insertId);
 
       // Respond with admin data
-      res.status(201).json({ 
+      res.status(200).json({ 
         id: result.insertId,
         email: req.body.email,
         type: 'admin',
